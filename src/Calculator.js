@@ -118,7 +118,8 @@ const Calculator = () => {
     // state
     const [result, setResult] = useState("")
     const [calc, setCalc] = useState("")
-    const [oprands, setOprands] = useState('')
+    const [oprands, setOprands] = useState([])
+    const [calculatedGeez, setCalculatedGeez] = useState(0)
     const ops = ['/', '*', '+', '-', '.'];
    
     const updateCalc = value => {
@@ -128,8 +129,27 @@ const Calculator = () => {
         ) {
             return;
         }
+        // This state is responsible for passing the value that eval() takes in
         setCalc(calc + value)
+        // This single Converter function below is does have a part in the math calculation. its here -
+        // for conversion purpose only - then the returned value will be displayed as a result in geez using other state. 
+        // This function will take in a value and convert it to geez
+        // if th value is not numeric, it will just push it to an array
+        // The function then returns the concatenated array and activate the setOprands state. 
+        const singleValConverter = (val) => {
+            const arr = []
+            if(isNaN(val)){
+                arr.push(val) 
+            } else {
+                arr.push(translate(val))
+                
+            }
 
+            return setOprands(oprands.concat(arr)) 
+        }
+
+        singleValConverter(value)
+        
         if(!ops.includes(value)) {
             const valAsString = eval(calc + value).toString()
             setResult(translate(parseFloat(valAsString)));
@@ -138,7 +158,9 @@ const Calculator = () => {
 
     const calculate = () => {
         const evaluatedStr = eval(calc).toString()
-        setCalc(translate(parseFloat(evaluatedStr)));
+        const parsedGeez = translate(parseFloat(evaluatedStr))
+        setCalc(parsedGeez);
+        setCalculatedGeez(parsedGeez)
     }
 
     const resetCalc = () => {
@@ -154,7 +176,7 @@ const Calculator = () => {
     return (
         <div className="calculator">
             <div className="display">
-                <p>{calc || "0"}</p>
+                <p>{calculatedGeez ? calculatedGeez : oprands.join('')}</p>
             </div>
             <div className="keybard-container">
                 <div className="operands">

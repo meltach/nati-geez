@@ -1,4 +1,4 @@
-# Partially functional Geez calculator
+# Functional Geez calculator with minor bugs
 
 This project is Owned by [Nati](https://github.com/natnaelkibe22/)
 
